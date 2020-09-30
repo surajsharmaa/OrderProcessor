@@ -3,6 +3,7 @@ package com.ebook.orderprocessorservice.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ebook.api.message.Email;
+import com.ebook.api.message.ShippingMessage;
 import com.ebook.orderprocessorservice.request.OrderRequest;
 import com.ebook.orderprocessorservice.response.OrderResponse;
 
@@ -48,6 +49,7 @@ public class Controller {
 		try {
 			System.out.println("Sending an email message.");
 		    jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello " + message.getFirstName()));
+		    jmsTemplate.convertAndSend("shipping", new ShippingMessage("info@example.com", "Delivered to  " + message.getFirstName()));
 		}catch (Exception e) {
 			System.out.println("Something went wrong!");
 		}
