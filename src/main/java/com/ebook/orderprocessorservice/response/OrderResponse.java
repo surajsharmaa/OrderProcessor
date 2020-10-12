@@ -2,20 +2,15 @@ package com.ebook.orderprocessorservice.response;
 
 public class OrderResponse {
 	
-	private String orderId;
+	private int orderId;
 
-	/**
-	 * @return the orderId
-	 */
-	public String getOrderId() {
+	public int getOrderId() {
 		return orderId;
 	}
 
-	/**
-	 * @param orderId the orderId to set
-	 */
-	public void setOrderId(String orderId) {
+	public void setOrderId(int orderId) {
 		this.orderId = orderId;
 	}
 
+	
 }

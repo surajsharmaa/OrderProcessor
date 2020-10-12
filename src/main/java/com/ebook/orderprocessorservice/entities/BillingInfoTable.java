@@ -1,8 +1,19 @@
-package com.ebook.orderprocessorservice.request;
+package com.ebook.orderprocessorservice.entities;
 
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
-public class OrderRequest {
+@Entity
+public class BillingInfoTable {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer billing_info_id;
+
 	private String first_name;
 	
 	private String last_name;
@@ -19,13 +30,17 @@ public class OrderRequest {
 	
 	private String zip_code;
 	
-	private String payment_type;
-	
-	private String creditCardNumber;
-	
-	private ShippingInfo shippingInfo;
-	
-	List<LineItem> lineItems;
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    OrderTable order;
+
+	public Integer getBilling_info_id() {
+		return billing_info_id;
+	}
+
+	public void setBilling_info_id(Integer billing_info_id) {
+		this.billing_info_id = billing_info_id;
+	}
 
 	public String getFirst_name() {
 		return first_name;
@@ -91,35 +106,12 @@ public class OrderRequest {
 		this.zip_code = zip_code;
 	}
 
-	public String getPayment_type() {
-		return payment_type;
+	public OrderTable getOrder() {
+		return order;
 	}
 
-	public void setPayment_type(String payment_type) {
-		this.payment_type = payment_type;
+	public void setOrder(OrderTable order) {
+		this.order = order;
 	}
 
-	public String getCreditCardNumber() {
-		return creditCardNumber;
-	}
-
-	public void setCreditCardNumber(String creditCardNumber) {
-		this.creditCardNumber = creditCardNumber;
-	}
-
-	public ShippingInfo getShippingInfo() {
-		return shippingInfo;
-	}
-
-	public void setShippingInfo(ShippingInfo shippingInfo) {
-		this.shippingInfo = shippingInfo;
-	}
-
-	public List<LineItem> getLineItems() {
-		return lineItems;
-	}
-
-	public void setLineItems(List<LineItem> lineItems) {
-		this.lineItems = lineItems;
-	}
 }
