@@ -40,6 +40,8 @@ public class OrderTable {
 	
 	@OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ShippingInfoTable shippingInfo;
+	
+	private String dataCenter;
 
 	public Integer getOrder_id() {
 		return order_id;
@@ -103,6 +105,14 @@ public class OrderTable {
 
 	public void setShippingInfo(ShippingInfoTable shippingInfo) {
 		this.shippingInfo = shippingInfo;
+	}
+
+	public String getDataCenter() {
+		return dataCenter;
+	}
+
+	public void setDataCenter(String dataCenter) {
+		this.dataCenter = dataCenter;
 	}
 
 

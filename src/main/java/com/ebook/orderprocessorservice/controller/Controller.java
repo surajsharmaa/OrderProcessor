@@ -41,19 +41,13 @@ public class Controller {
 	@Autowired
 	private OrderRepository orderRepository;
 
-	@RequestMapping("/")
-	public String index() {
-		return "Greetings from Spring Boot!";
-	}
-
 	@RequestMapping("/suraj")
 	public String suraj() {
 		return "Hello Suraj!";
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/order")
-	public ResponseEntity<OrderResponse> createEventException(@Valid @RequestBody OrderRequest message,
-			@RequestHeader("token") String tokenFromRequest, BindingResult bindingResult) throws Exception {
+	public ResponseEntity<OrderResponse> createEventException(@Valid @RequestBody OrderRequest message) throws Exception {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		HttpStatus statusCode = HttpStatus.OK;
 		
@@ -104,19 +98,51 @@ public class Controller {
 			
 			order.setShippingInfo(shipping);
 			
+			order.setDataCenter("a-");
+			
 			OrderTable newOrder = orderRepository.save(order);
 			
-			response.setOrderId(newOrder.getOrder_id());
+			response.setOrderId(newOrder.getDataCenter()+newOrder.getOrder_id());
 
 			System.out.println("Sending an email message.");
-			jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello " + newOrder.getOrder_id()));
-			jmsTemplate.convertAndSend("shipping",
-					new ShippingMessage("info@example.com", "Delivered to  " + newOrder.getOrder_id()));
+			jmsTemplate.convertAndSend("mailbox", createEmailMessage(message, s, newOrder));
+			jmsTemplate.convertAndSend("shipping", createShippingMessage(s, newOrder));
+			
 		} catch (Exception e) {
 			System.out.println("Something went wrong!"+ e);
 		}
 		return new ResponseEntity<OrderResponse>(response, httpHeaders, statusCode);
 
+	}
+
+	private Email createEmailMessage(OrderRequest message, ShippingInfo s, OrderTable newOrder) {
+		Email email = new Email();
+		email.setTo(s.getRecipient_email());
+		email.setOrderId(newOrder.getDataCenter()+newOrder.getOrder_id());
+		email.setFirst_name(message.getFirst_name());
+		email.setRecipient_first_name(s.getRecipient_first_name());
+		email.setRecipient_last_name(s.getRecipient_last_name());
+		email.setRecipient_email(s.getRecipient_email());
+		email.setRecipient_phone_number(s.getRecipient_phone_number());
+		email.setRecipient_address1(s.getRecipient_address1());
+		email.setRecipient_city(s.getRecipient_city());
+		email.setRecipient_state(s.getRecipient_state());
+		email.setRecipient_zip_code(s.getRecipient_zip_code());
+		return email;
+	}
+	
+	private ShippingMessage createShippingMessage(ShippingInfo s, OrderTable newOrder) {
+		ShippingMessage shippingInfo = new ShippingMessage();
+		shippingInfo.setOrderId(newOrder.getDataCenter()+newOrder.getOrder_id());
+		shippingInfo.setRecipient_first_name(s.getRecipient_first_name());
+		shippingInfo.setRecipient_last_name(s.getRecipient_last_name());
+		shippingInfo.setRecipient_email(s.getRecipient_email());
+		shippingInfo.setRecipient_phone_number(s.getRecipient_phone_number());
+		shippingInfo.setRecipient_address1(s.getRecipient_address1());
+		shippingInfo.setRecipient_city(s.getRecipient_city());
+		shippingInfo.setRecipient_state(s.getRecipient_state());
+		shippingInfo.setRecipient_zip_code(s.getRecipient_zip_code());
+		return shippingInfo;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{orderId}")
