@@ -128,6 +128,7 @@ public class Controller {
 		email.setRecipient_city(s.getRecipient_city());
 		email.setRecipient_state(s.getRecipient_state());
 		email.setRecipient_zip_code(s.getRecipient_zip_code());
+		email.setOrderDetail(getOrderDetail(message.getLineItems().get(0).getSku()));
 		return email;
 	}
 	
@@ -145,6 +146,22 @@ public class Controller {
 		shippingInfo.setSku(message.getLineItems().get(0).getSku());
 		shippingInfo.setQuantity(message.getLineItems().get(0).getQuantity());
 		return shippingInfo;
+	}
+	
+	private String getOrderDetail(String sku) {
+		String detail = null;
+		
+		if(sku.equals("SKU123456")) {
+			detail = "Distributed Operating Systems";
+		}else if(sku.equals("Al23579")) {
+			detail = "Algorithm";
+		}else if(sku.equals("Md7his")) {
+			detail = "Database Management";
+		}else if(sku.equals("X0mot4tos")) {
+			detail = "Machine Learning";
+		}
+		
+		return detail;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{orderId}")

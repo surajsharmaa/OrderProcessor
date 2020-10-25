@@ -8,6 +8,7 @@ public class Email implements Serializable {
 
 	private String to;
 	private String orderId;
+	private String orderDetail;
 	private String first_name;
 	
 	// shipping info
@@ -118,6 +119,14 @@ public class Email implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getOrderDetail() {
+		return orderDetail;
+	}
+
+	public void setOrderDetail(String orderDetail) {
+		this.orderDetail = orderDetail;
 	}
 
 	// @Override
