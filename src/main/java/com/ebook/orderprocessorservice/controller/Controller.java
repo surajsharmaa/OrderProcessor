@@ -106,7 +106,7 @@ public class Controller {
 
 			System.out.println("Sending an email message.");
 			jmsTemplate.convertAndSend("mailbox", createEmailMessage(message, s, newOrder));
-			jmsTemplate.convertAndSend("shipping", createShippingMessage(s, newOrder));
+			jmsTemplate.convertAndSend("shipping", createShippingMessage(message, s, newOrder));
 			
 		} catch (Exception e) {
 			System.out.println("Something went wrong!"+ e);
@@ -131,7 +131,7 @@ public class Controller {
 		return email;
 	}
 	
-	private ShippingMessage createShippingMessage(ShippingInfo s, OrderTable newOrder) {
+	private ShippingMessage createShippingMessage(OrderRequest message, ShippingInfo s, OrderTable newOrder) {
 		ShippingMessage shippingInfo = new ShippingMessage();
 		shippingInfo.setOrderId(newOrder.getDataCenter()+newOrder.getOrder_id());
 		shippingInfo.setRecipient_first_name(s.getRecipient_first_name());
@@ -142,6 +142,8 @@ public class Controller {
 		shippingInfo.setRecipient_city(s.getRecipient_city());
 		shippingInfo.setRecipient_state(s.getRecipient_state());
 		shippingInfo.setRecipient_zip_code(s.getRecipient_zip_code());
+		shippingInfo.setSku(message.getLineItems().get(0).getSku());
+		shippingInfo.setQuantity(message.getLineItems().get(0).getQuantity());
 		return shippingInfo;
 	}
 	

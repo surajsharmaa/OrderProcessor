@@ -24,6 +24,11 @@ public class ShippingMessage implements Serializable {
 	private String recipient_zip_code;
 	
 	private String orderId;
+	
+	private String sku;
+	
+	private int quantity;
+	
 
 	public String getRecipient_first_name() {
 		return recipient_first_name;
@@ -101,6 +106,19 @@ public class ShippingMessage implements Serializable {
 		this.orderId = orderId;
 	}
 
-	
+	public String getSku() {
+		return sku;
+	}
 
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 }
